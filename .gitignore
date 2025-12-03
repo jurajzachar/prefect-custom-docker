@@ -1,0 +1,5 @@
+dist
+.env
+build
+.idea
+__pycache__

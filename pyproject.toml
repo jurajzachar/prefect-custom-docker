@@ -1,0 +1,26 @@
+[project]
+name = "prefect-custom-docker"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Juraj Zachar",email = "juraj.zachar@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+
+[tool.poetry]
+packages = [{include = "prefect_custom_docker", from = "src"}]
+
+[tool.poetry.dependencies]
+python = ">=3.13,<3.14"
+poetry-core = "^2.2.1"
+prefect = "^3.0"
+docker = "^7"
+pydantic-settings = "*"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "*"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

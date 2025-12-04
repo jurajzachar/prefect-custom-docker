@@ -31,7 +31,5 @@ jobs:
           poetry --version || true
       - name: Test
         run: make test
-      - name: Deploy (build/docker_push/deploy_prefect)
-        run: |
-          make configure_prefect
-          make deploy
+      - name: Build & Push Docker Image To Registry
+        run: make build && make docker_push

@@ -34,5 +34,3 @@ jobs:
         run: make test
       - name: Build
         run: make build
-      - name: Push Docker Image To Registry
-        run: make docker_push

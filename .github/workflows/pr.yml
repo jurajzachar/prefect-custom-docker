@@ -1,0 +1,37 @@
+name: PR Build and Test
+
+on:
+  pull_request:
+    branches:
+      - main
+
+defaults:
+  run:
+    shell: zsh -l {0}
+
+jobs:
+  build-and-test:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Load custom PATH
+        run: |
+          if [ -f /etc/actions-runner/.path ]; then
+            while IFS= read -r p; do
+              echo "$p" >> $GITHUB_PATH
+            done < /etc/actions-runner/.path
+          fi
+      - name: Debug Actions
+        run: |
+          echo "SHELL=$SHELL"
+          echo "USER=$(whoami)"
+          echo "PATH=$PATH"
+          which poetry || echo "poetry not found"
+          poetry --version || true
+      - name: Test
+        run: make test
+      - name: Build
+        run: make build
+      - name: Push Docker Image To Registry
+        run: make docker_push

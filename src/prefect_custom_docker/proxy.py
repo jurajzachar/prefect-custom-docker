@@ -17,8 +17,8 @@ class DockerContainerProxyConfig(BaseSettings):
 
     # Required environment variables
     image: str = Field(alias="IMAGE")
-    command: str = Field(alias="COMMAND", default=None)
-    volumes: list[str] = Field(alias="VOLUMES", default=[])
+    command: None | str = Field(alias="COMMAND", default=None)
+    volumes: None | list[str] = Field(alias="VOLUMES", default=None)
 
     # Optional dynamic environment mapping
     environment: dict[str, str] = Field(default_factory=dict)
@@ -55,6 +55,13 @@ def run_docker_container(config: DockerContainerProxyConfig):
 
 @flow(log_prints=True)
 def docker_flow():
-    config = DockerContainerProxyConfig()
-    logging.info(f"successfully loaded docker proxy config: {config.image} ...")
-    run_docker_container(config)
+    try:
+        config = DockerContainerProxyConfig()
+        logging.info(f"successfully loaded docker proxy config: {config.image} ...")
+        run_docker_container(config)
+    except Exception as e:
+        print("Encountered error: ", e)
+
+
+if __name__ == '__main__':
+    docker_flow()

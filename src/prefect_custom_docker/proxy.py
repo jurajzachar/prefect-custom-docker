@@ -17,8 +17,8 @@ class DockerContainerProxyConfig(BaseSettings):
 
     # Required environment variables
     image: str = Field(alias="IMAGE")
-    command: str = Field(alias="COMMAND", default=None)
-    volumes: list[str] = Field(alias="VOLUMES", default=[])
+    command: None | str = Field(alias="COMMAND", default=None)
+    volumes: None | list[str] = Field(alias="VOLUMES", default=None)
 
     # Optional dynamic environment mapping
     environment: dict[str, str] = Field(default_factory=dict)

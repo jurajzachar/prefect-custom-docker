@@ -1,0 +1,44 @@
+# a declarative deployment spec Prefect can use to build an image and register a deployment.
+# see https://docs.prefect.io/v3/how-to-guides/deployments/prefect-yaml
+
+name: mypp-etl
+version: null
+
+build: null
+push: null
+pull:
+   - prefect.deployments.steps.set_working_directory:
+         id: set-working-directory
+         directory: "/app"
+
+# Deployments
+deployments:
+  - name: myapp-backfill
+    tags: [ "production", "jvm", "prefect-custom-docker" ]
+    description: "Production deployment for mypp"
+    # see makefile target for how this is cloned && relative path derived
+    # [!] must match the path inside the docker image:
+    # https://github.com/jurajzachar/prefect-custom-docker/blob/main/Dockerfile
+    entrypoint: "prefect_custom_docker/proxy.py:docker_flow"
+    work_pool:
+      name: docker-pool  # Your Prefect work pool name
+      work_queue_name: default
+      job_variables:
+        image: "{{ prefect.variables.docker_registry }}/prefect-custom-docker:latest"
+        env:
+          IMAGE: "{{ prefect.variables.docker_registry }}/myapp-etl:latest"
+          VOLUMES: "{{ prefect.variables.mypp_etl_docker_volumes }}"
+          DB_HOST_ENV: "{{ prefect.variables.mypp_etl_db_host_env }}"
+          DB_NAME_ENV: "{{ prefect.variables.mypp_etl_db_name_env }}"
+          DB_PASSWORD_ENV: "{{ prefect.variables.mypp_etl_db_password_env }}"
+          DB_PORT_ENV: "{{ prefect.variables.mypp_etl_db_port_env }}"
+          DB_USER_ENV: "{{ prefect.variables.mypp_etl_db_user_env }}"
+          TARGET_FOLDER_ENV: "/opt/data"
+        volumes:
+          - "/var/run/docker.sock:/var/run/docker.sock"
+    schedule:
+      cron: "0 12 * * *"  # runs every day at 12pm
+      timezone: "UTC"
+    concurrency_limit:
+      limit: 1
+      collision_strategy: CANCEL_NEW

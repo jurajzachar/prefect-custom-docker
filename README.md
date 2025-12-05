@@ -10,6 +10,12 @@ settings.
 
 ## Core Idea
 
+1. __One__ Dockerized Prefect flow which act as a proxy. 
+2. Actual flow configurations are declared as child Docker containers using yaml syntax.
+3. Polyglot setup - Prefect spins up flows which are implemented outside of Python ecosystem (e.g. JVM-based stacks)
+
+See [examples](./examples) for details.
+
 ```mermaid
 flowchart LR
     subgraph prefect
@@ -17,7 +23,7 @@ flowchart LR
         B[load proxy config]
         C[start proxy container logic]
     end
-
+git 
     A --> B --> C
 
     subgraph host
@@ -98,3 +104,12 @@ All logs emitted by the child container are captured, decoded, and printed into 
 * Prefect UI shows full container output
 * Errors and tracebacks appear naturally in the flow logs
 * No separate logging setup is required
+
+## How To Build
+In order to build the Dockerized proxy, modify the provided [Makefile](./Makefile) and specify your Docker registry. 
+
+Then build the docker image and optionally push it to the registry.
+
+```
+make build && make docker_push
+```

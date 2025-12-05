@@ -13,7 +13,7 @@ pull:
 
 # Deployments
 deployments:
-  - name: binance-trades-backfill
+  - name: myapp-backfill
     tags: [ "production", "jvm", "prefect-custom-docker" ]
     description: "Production deployment for mypp"
     # see makefile target for how this is cloned && relative path derived

@@ -1,4 +1,5 @@
 # Makefile
+DOCKER_HOST = unix://var/run/docker.sock
 REGISTRY = calbuco:5000/thorium
 IMAGE = prefect-custom-docker
 GIT_COMMIT := $(shell git rev-parse --short HEAD)

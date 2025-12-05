@@ -23,7 +23,6 @@ flowchart LR
         B[load proxy config]
         C[start proxy container logic]
     end
-git 
     A --> B --> C
 
     subgraph host

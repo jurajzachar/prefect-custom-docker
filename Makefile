@@ -2,7 +2,6 @@
 REGISTRY = calbuco:5000/thorium
 IMAGE = prefect-custom-docker
 GIT_COMMIT := $(shell git rev-parse --short HEAD)
-WORK_POOL = docker-pool
 
 .PHONY: build test docker_push
 

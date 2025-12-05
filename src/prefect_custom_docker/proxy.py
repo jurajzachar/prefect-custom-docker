@@ -61,6 +61,7 @@ def docker_flow():
         run_docker_container(config)
     except Exception as e:
         print("Encountered error: ", e)
+        exit(1)
 
 
 if __name__ == '__main__':
